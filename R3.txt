@@ -1,0 +1,24 @@
+enable
+conf ter
+hostname **
+enable secret **
+line console 0
+password **
+login
+line vty 0 15
+password **
+login
+service pass
+banner motd "Welcome!"
+interface Gig *port*
+ip add *ip* *maszk*
+no shutdown
+exit
+ip dhcp pool **
+network *ip* *maszk*
+default-router *ip*
+dns-server *ip*
+exit
+(opcionális)ip dhcp excluded-address *ip*
+end
+wr

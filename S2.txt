@@ -1,0 +1,24 @@
+enable
+conf ter
+hostname **
+enable secret **
+line console 0
+password **
+login
+exit
+line vty 0 15
+password **
+login
+service pass
+banner motd "Welcome!"
+interface *port*
+ip address *ip* *maszk*
+ip default-gateway *ip*
+no shutdown
+exit
+ip dhcp pool **
+network *ip* *maszk*
+default-router *ip*
+exit
+end
+wr
