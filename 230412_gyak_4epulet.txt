@@ -1,0 +1,288 @@
+10.0.0.0	10.0.0.1, 10.0.0.2
+10.0.0.4	10.0.0.5, 10.0.0.6
+10.0.0.8	10.0.0.9, 10.0.0.10
+10.0.0.12	10.0.0.13, 10.0.0.14
+
+A ép.:
+s0/0/0 10.0.0.1 255.255.255.252
+g0/1.10 192.168.0.1 255.255.255.0
+g0/1.20 192.168.1.1 255.255.255.0
+g0/1.30 192.168.2.1 255.255.255.0
+g0/1.40 192.168.3.1 255.255.255.0
+g0/1.50 192.168.4.1 255.255.255.0
+------------------------------------------
+
+enable
+conf t
+hostname R_SERVER
+
+int s0/0/0
+ip add 10.0.0.2  255.255.255.252
+no sh
+exit
+int gig0/1
+ip add 172.16.0.1 255.255.255.224
+no sh
+exit
+
+-------------------------------------------
+enable
+conf t
+hostname SW_SERVER
+
+-------------------------------------------
+
+enable
+conf t
+hostname R1
+
+int s0/0/0
+ip add 10.0.0.1  255.255.255.252
+no sh
+exit
+int gig0/1
+no sh
+exit
+
+int g0/1.10
+encapsulation dot1Q 10
+ip address 192.168.0.1 255.255.255.0
+int g0/1.20
+encapsulation dot1Q 20
+ip address 192.168.1.1 255.255.255.0
+int g0/1.30
+encapsulation dot1Q 30
+ip address 192.168.2.1 255.255.255.0
+int g0/1.40
+encapsulation dot1Q 40
+ip address 192.168.3.1 255.255.255.0
+int g0/1.50
+encapsulation dot1Q 50
+ip address 192.168.4.1 255.255.255.0
+
+--------------------------------------------
+ip domain-name R1.hu
+crypto key generate rsa mod 1024
+user admin priv 15 secret cisco
+banner motd #Belepes csak meghatalmazassal!#
+login block-for 100 attempts 15 within 180
+logging console
+service timestamps log datetime msec
+service timestamps debug datetime msec
+line vty 0 15
+password cisco
+login local
+transport input ssh
+exit
+line console 0
+password cisco
+login
+exit
+line aux 0
+password cisco
+login
+exit
+enable secret cisco
+service password-encryption 
+--------------------------------------------
+--------------------------------------------
+ip dhcp pool DHCP_POOL_1
+network 192.168.0.1 255.255.255.0
+default-router 192.168.0.1
+dns-server *ip*
+exit
+ip dhcp excluded-address 192.168.0.1
+end
+wr
+--------------------------------------------
+enable
+conf t
+hostname S1
+int g0/1
+switchport mode trunk
+no sh
+interface vlan 10
+ip address 192.168.0.2 255.255.255.0
+no shutdown
+exit
+interface vlan 20
+ip address 192.168.1.2 255.255.255.0
+no shutdown
+exit
+interface vlan 30
+ip address 192.168.2.2 255.255.255.0
+no shutdown
+exit
+interface vlan 40
+ip address 192.168.3.2 255.255.255.0
+no shutdown
+exit
+interface vlan 50
+ip address 192.168.4.2 255.255.255.0
+no shutdown
+exit
+
+int f0/24
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/23
+switchport mode access
+switchport access vlan 20
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/22
+switchport mode access
+switchport access vlan 30
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/21
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/20
+switchport mode access
+switchport access vlan 50
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int
+int range f0/1-19
+sh
+
+
+
+
+----------------------------------------------
+ena
+conf t
+hostn vlan10
+interface vlan 10
+ip address 192.168.0.2 255.255.255.0
+no shutdown
+exit
+int range f0/1-13
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/24
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/14-23
+sh
+
+
+ena
+conf t
+hostn vlan20
+int range f0/1-13
+switchport mode access
+switchport access vlan 20
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int f0/24
+switchport mode access
+switchport access vlan 20
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/14-23
+sh
+
+ena
+conf t
+hostn vlan30
+int range f0/1-13
+switchport mode access
+switchport access vlan 30
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+hostn vlan30
+int range f0/24
+switchport mode access
+switchport access vlan 30
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/14-23
+sh
+
+ena
+conf t
+hostn vlan40
+int range f0/1-13
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/24
+switchport mode access
+switchport access vlan 40
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/14-23
+sh
+
+ena
+conf t
+hostn vlan50
+int range f0/1-13
+switchport mode access
+switchport access vlan 50
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/24
+switchport mode access
+switchport access vlan 50
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+int range f0/14-23
+sh
+----------------------------------------------------

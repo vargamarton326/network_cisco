@@ -1,0 +1,155 @@
+enable
+conf t
+hostname R1
+banner motd #Belepes csak meghatalmazassal!#
+line vty 0 15
+login local
+transport input ssh
+exit
+line console 0
+password cisco
+login
+exit
+line aux 0
+password cisco
+login
+exit
+enable secret cisco
+service password-encryption
+ip domain-name R1.hu
+crypto key generate rsa general-keys modulus 1024
+username admin priv 15 secret cisco
+ip ssh version 2
+
+
+
+int f0/0
+ip add 192.168.5.1 255.255.255.0
+no shut
+exit
+
+
+
+ip dhcp excluded-address 192.168.5.1 192.168.5.10
+ip dhcp pool lan_1
+network 192.168.5.0 255.255.255.0
+default-router 192.168.5.1
+dns-server 192.168.5.1
+exit
+
+
+ip route 0.0.0.0 0.0.0.0 10.10.20.1
+
+
+
+router rip
+version 2
+network 192.168.5.0
+network 10.4.122.0
+no auto-summ
+
+
+
+router ospf 10
+router-id 1.1.1.1
+network 192.168.0.0 0.0.0.255 area 0
+network 10.0.0.0 0.0.0.3 area 0
+network 10.0.0.8 0.0.0.3 area 0
+
+
+
+ip route 10.10.16.0 255.255.255.0 s0/1/1
+
+ipv6 route ::/0 s0/0/1
+
+ipv6 route 2001:db8:1:a::/63 s0/1/0
+
+
+int g0/1.10
+encapsulation dot1Q 10
+ip address 192.168.0.1 255.255.255.0
+
+
+
+ip default-gateway 192.168.1.1
+
+
+ipv6 unicast-routing
+int g0/0
+ipv6 enable
+ipv6 address 2001:db8:cafe:1::1/64
+ipv6 add fe80::1 link-local
+no sh
+int g0/1
+ipv6 enable
+ipv6 address 2001:db8:cafe:2::1/64
+ipv6 add fe80::1 link-local
+no sh
+
+-----------------------------------------------
+enable
+conf t
+hostname S1
+int g0/1
+switchport mode trunk
+no sh
+interface vlan 10
+ip address 192.168.0.2 255.255.255.0
+no shutdown
+exit
+interface vlan 20
+ip address 192.168.1.2 255.255.255.0
+no shutdown
+exit
+
+
+
+
+int f0/24
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+
+
+int range f0/1-13
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+
+
+int range f0/14-23
+sh
+
+
+int range g0/1-2
+switchport mode trunk
+switchport trunk native vlan 99
+
+
+.......................................
+access-list 2 permit 10.0.1.0 0.0.0.255
+line vty 5 15
+transport input ssh
+access-class 2 in
+exit
+.......................................
+ssh -l admin 10.0.1.10
+
+C:\>telnet
+Cisco Packet Tracer PC Telnet
+Usage: telnet target [port]
+C:\>telnet 192.168.0.1 23
+Trying 192.168.0.1 ...Open
+User Access Verification
+Password: 
+R>
+
+R(config)#do show cdp nei

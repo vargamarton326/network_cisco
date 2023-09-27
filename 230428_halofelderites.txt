@@ -1,0 +1,79 @@
+Árnygép: 192.168.0.12 /24
+dns server: 172.16.0.3
+
+ping sweep
+
+Pinging 192.168.0.0 with 32 bytes of data:
+Reply from 192.168.0.12
+Reply from 192.168.0.1
+Reply from 192.168.0.11
+Reply from 192.168.0.10
+Reply from 192.168.0.3
+Reply from 192.168.0.254
+Reply from 192.168.0.2
+
+arp -a
+C:\>arp -a
+  Internet Address      Physical Address      Type
+  192.168.0.1           00d0.bc95.b301        dynamic
+  192.168.0.2           0002.1664.0c27        dynamic
+  192.168.0.3           0060.70c7.ebe4        dynamic
+  192.168.0.10          0005.5e8c.aa4d        dynamic
+  192.168.0.11          000c.8586.0903        dynamic
+  192.168.0.254         0090.0cab.23d2        dynamic
+
+192.168.0.1:
+R(config)#do show cdp nei
+Gig 0/0 Switch 2960 Gig 0/2
+
+R(config)#do sh runn
+line vty 0 4
+ password admin
+ login
+line vty 5 15
+ password admin
+ login
+
+interface GigabitEthernet0/0
+ ip address 192.168.0.1 255.255.255.0
+interface GigabitEthernet0/1
+ ip address 172.16.0.1 255.255.0.0
+
+192.168.0.2:
+R Gig 0/2 Router C1900 Gig 0/0
+
+line vty 0 4
+ password admin
+ login
+line vty 5 15
+ password admin
+ login
+
+interface Vlan1
+ ip address 192.168.0.2 255.255.255.0
+!
+ip default-gateway 192.168.0.1
+!
+
+OUT(config)#do show mac-address
+Mac Address Table
+-------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       --------    -----
+
+   1    0001.96a4.1b03    DYNAMIC     Gig0/1
+   1    0060.5cdb.11e9    DYNAMIC     Gig0/1
+   1    00d0.bc95.b301    DYNAMIC     Gig0/2
+
+172.16.0.1:
+OUT Gig 0/0 Switch 2960 Gig 0/2
+
+172.16.0.2:
+
+
+192.168.0.2 - R router 0.1
+192.168.0.1 - OUT switch 0.2
+172.16.0.2 - R router 
+172.16.0.1 - OUT switch 
+

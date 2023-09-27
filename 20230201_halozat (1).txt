@@ -1,0 +1,154 @@
+Statikus routing
+Hálózatok megismerése
+
+Egy router hogyan ismer meg egy hálózatot?
+
+    kézzel megadva
+    dinamikusan – egy irányító protokollon keresztül
+
+Előnyök
+
+    router nem hirdeti a hálózaton
+    kevesebb sávszélességet foglalnak
+    továbbítási útvonal előre ismert
+
+Hátrányok
+
+    időigényes a rendszergazda számára
+    hibaérzékeny (nagy hálózaton különösen)
+    nagy hálózat esetén nem egyszerű a karbantartás
+
+Véghálózat
+
+A véghálózatról beszélünk, ha a szomszéd hálózatok felé csak egyetlen út vezet. Az egyetlen irányba vezető forgalomirányító a csonk forgalomirányító, angolul stub router. 
+
+
+Alapértelmezett útvonal
+ip route 0.0.0.0 0.0.0.0 {IP-cím | kimenő-interfész}
+
+
+IPv6 statikus útvonal
+R1(config)# ipv6 route ipv6-előtag/előtaghossz { ipv6-cím | kimenő-interfész }
+
+
+Lebegő útvonalak
+A lebegő útvonal egy tartalék útvonal. Ha az elsődleges útvonal meghibásodik, akkor ez kerül kiválasztásra.
+A lebegő útvonalnak az adminisztratív távolsága nagyobb. 
+
+R1(config)#ip route 192.168.20.0 255.255.255.0 S0/0/0 150
+
+
+
+Összevont útvonalak
+
+Ha a célhálózatok címe folytonos, egyetlen címmel tudunk rá hivatkozni,
+ és mind a négy hálózat ugyanazon az interfészen érhető el, 
+akkor egyetlen bejegyzéssel hivatkozhatunk rájuk.
+
+
+Összevont útvonal meghatározása:
+
+    felírjuk a hálózati címeket binárisan
+    meghatározzuk balról mennyi bit egyezik
+    az egyező bitek után részt 0-val egészítjük ki 32 bit hosszúra
+
+IPv6 statikus útvonal
+
+R1(config)# ipv6 route ipv6-előtag/előtaghossz { ipv6-cím | kimenő-interfész }
+
+
+routing ipv4:
+	nyomonkövetés - traceroute "ip"
+	show ip route
+	show ip route (opcoók: summary, eigrp, bgp, ospf, rip, static, connected)
+	show ip route "hálózat"
+	Router(config)# ip route hálózati-cím alhálózati-maszk { IP-cím | interfész-típus interfész-szám [ IP-cím ]} [ távolság ] [ name név ] [ permanent ] [ tag címke ] 
+	alapértelmezett útvonal - ip route 0.0.0.0 0.0.0.0 { IP-cím | kimenő-interfész }
+	Lebegő útvonal - R1(config)#ip route 192.168.20.0 255.255.255.0 S0/0/0 89
+	Lebegő útvonalak adminisztratív távolsága: Statikus-1, EIGRP-90, IGRP-100, OSPF-110, IS-IS-115, RIP-120
+
+Összevont útvonal meghatározása:
+	felírjuk a hálózati címeket binárisan
+	meghatározzuk balról mennyi bit egyezik
+	az egyező bitek után részt 0-val egészítjük ki 32 bit hosszúra
+
+	példa:    192.168.0.0/24 - 11000000 10101000 00000000 00000000
+		  192.168.1.0/24 - 11000000 10101000 00000001 00000000
+		  192.168.2.0/24 - 11000000 10101000 00000010 00000000
+		  192.168.3.0/24 - 11000000 10101000 00000011 00000000
+	eredmény: 192.168.0.0/22 - 11000000 10101000 00000000 00000000
+
+	beállítás:R1(config)# ip route 192.168.0.0 255.255.252.0 s0/0/0
+
+
+
+
+
+routing ipv6:
+	show ipv6 route
+	show ipv6 route static
+	show ipv6 route "hálózat"
+	Router(config)# ipv6 route ipv6-előtag/előtag-hossz { ipv6-cím | kimenő-interfész }
+	alapértelmezett útvonal - ipv6 route ::/0 { ipv6-cím | kimenő-interfész }
+
+Összevonás lépései:
+	címek felsorolása
+	rövidítések kiegészítése
+	eltérő címek meghatározása
+	eltérő részeket binárissá alakítjuk
+	egyező biteket megszámoljuk
+	egyező bitek kiegészítése 0-val
+	bináris részt visszaalakítjuk hex számmá
+	megadjuk az előtagot
+
+	Ipv6 tömörítve:
+		2001:0db8:def:1::/64
+		2001:0db8:def:2::/64
+		2001:0db8:def:3::/64
+		2001:0db8:def:4::/64
+
+	Ipv6 kioldottabb:
+		2001:0db8:0def:0001::/64
+		2001:0db8:0def:0002::/64
+		2001:0db8:0def:0003::/64
+		2001:0db8:0def:0004::/64
+
+	Ipv6 "teljes" kiírt:
+		2001:0db8:0def:0000000000000001::/64
+		2001:0db8:0def:0000000000000010::/64
+		2001:0db8:0def:0000000000000011::/64
+		2001:0db8:0def:0000000000000100::/64
+
+		 16   16   16       13
+	        bit + bit + bit +   bit   =  /61
+
+ 	Eredmény: 2001:0db8:0def:0000:: /61
+
+	Végeredmény a fentebbi 3 formában:
+				2001:0db8:0def:0000::/61
+				2001:0db8:0def:0::/61
+				2001:0db8:0def::/61
+
+
+	 Beállítás: R1(config)# ipv6 route 2001:db8:def:0::/61 s0/0/0
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+permenent storage:
+rom:A ROM egy beégetett firmware-t tartalmazó integrált áramkör a forgalomirányító belsejében,
+	ami áramtalanításkor vagy újraindítás során nem veszti el tartalmát.
+	Itt tárolódik az összes indítási utasítás, alap diagnosztikai szoftver,
+	csökkentett szolgáltatáskészletű IOS
+ram: itt tárolódik minden a működés során: 
+	IOS, aktív konfig fájl, IP irányítótábla, ARP tábla(ipv4 és mac címek itt vannak összerendezve),
+	csomagpuffer (csomagok ki és bemenet előtt itt tárolódnak)
+
+temp storage:
+flash: A flash egy nem felejtő memória, amit az IOS és más rendszerfájlok állandó tárolására használnak.
+	Az IOS az indítási folyamat során a RAM-ba másolódik.
+
+Network storage/ tftp server: Hálózati tárhely, konfigfájlokat ide lehet lementeni a hálózaton
+
+
+nvram: tárolja az indító konfigurációs fájlt (startup-config), Nem tud törlődni.
+console: RJ-45 és egy B típusú USB csatlakozóval szerelt konzol port a kezdeti konfigurációhoz és a parancssori hozzáféréshez.
+
+
+
+A FLASHból töltődik be a RAMba az IOS, az NVRAMból pedig a startup-config,
+és ha betöltődött, onnantól running-config
+
+1)
+post: önellenőrzési folyamat, mely sorána a BOOTSTRAP betöltődik
+bootstrap: rendszerindító program (ROMból RAMba)
+2)
+Cisco IOS betöltése (FLASHbób RAMba)
+3)
+IOS önkicsomagolása
+4)
+konfigfájl betöltése:
+Alapvetően az NVRAM tartalmazza, ha nincs keresi a tftp Serveren, ha ott sincs megy tovább a konzolra.
+
+kép bal oldalán memóriatípusok, középen, hogy mi a neve annak ami betöltődik, jobboldalon pedig, hogy mit tartalmaz.
+
+

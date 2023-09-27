@@ -1,0 +1,16 @@
+pt szimulációs mód:
+haszna: az adatcsomagokat lehet nyomonkövetni.
+a megfelelő szűrőket ki kell választani.
+ping: ICMP
+a jobboldali listában kiváéasztható bármely adatcsomag,
+ahol megjelenik az osi modell rétegei alapján csoportosított infó
+-------------------------------------------------------------------
+layer1: fizikai port (honnan:hova)
+layer2 keret: MAC cím (honnan:hova)
+layer3 ICNP8 (ping) csomag: lokális IP (honnan:hova)
+-------------------------------------------------------------------
+A csomagokban mindig benne van a forrrás, a cél MAC és IP cím is.
+
+A Switch 2.rétegbeli eszköz, nem dolgozik ip-kkel
+A switch tárolja az IP MAC párosokat.
+loopback: A gép hákókártyájának címe, a gép önmagát érhetiel. (127.0.0.1)

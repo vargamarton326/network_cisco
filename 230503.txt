@@ -1,0 +1,27 @@
+ip dhcp excluded-address 192.168.0.1 192.168.0.10
+ip dhcp pool lan_1
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 192.168.1.9
+exit
+
+router rip
+version 2
+network 192.168.0.0
+network 10.0.0.0
+no auto-summ
+
+
+R1
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool lan_1
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 192.168.1.9
+exit
+
+router rip
+version 2
+network 192.168.1.0
+network 10.0.0.0
+no auto-summ

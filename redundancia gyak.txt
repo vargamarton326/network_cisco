@@ -1,0 +1,310 @@
+GW:
+
+	enable
+	clock set 14:10:00 6 jun 2023
+	conf t
+	hostname GW
+	banner motd #Belepes csak meghatalmazassal!#
+	login block-for 100 attempts 15 within 180
+	logging on
+	login on-failure log
+	login on-success log
+	logging console
+	logging buffered
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	no ip domain-lookup
+	line vty 0 15
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	line console 0
+	password Con123
+	login
+	exec-timeout 10 10
+	exit
+	line aux 0
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	enable secret Ena123
+	service password-encryption 
+
+	ip domain-name Gw.hu
+	crypto key generate rsa general-key modulus 1024
+	user admin priv 15 secret cisco
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	ip ssh version 2
+
+	interface g0/0
+	ip address 10.0.1.1 255.255.255.252
+	no shutdown
+	exit
+	
+	interface g0/1
+	ip address 10.0.2.1 255.255.255.252
+	no shutdown
+	exit
+
+
+	interface Lo1
+	ip address 162.16.0.1 255.255.0.0
+	no shutdown
+	exit
+
+
+ip route 0.0.0.0 0.0.0.0 Lo1
+
+
+router ospf 1
+router-id 1.1.1.1
+network 10.0.1.0 0.0.0.3 area 0
+network 10.0.2.0 0.0.0.3 area 0
+exit
+
+
+
+-------------------------------------------------------------
+
+
+
+Master:
+
+
+	enable
+	clock set 14:10:00 6 jun 2023
+	conf t
+	hostname Master
+	banner motd #Belepes csak meghatalmazassal!#
+	login block-for 100 attempts 15 within 180
+	logging on
+	login on-failure log
+	login on-success log
+	logging console
+	logging buffered
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	no ip domain-lookup
+	line vty 0 15
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	line console 0
+	password Con123
+	login
+	exec-timeout 10 10
+	exit
+	line aux 0
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	enable secret Ena123
+	service password-encryption 
+	
+	ip domain-name Master.hu
+	crypto key generate rsa general-key modulus 1024
+	user admin priv 15 secret cisco
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	ip ssh version 2
+
+	interface g0/1
+	ip address 10.0.1.2 255.255.255.252
+	no shutdown
+	exit
+
+	
+	interface g0/0
+	ip address 192.168.0.254 255.255.255.0
+	no shutdown
+	exit
+
+
+int g0/0
+standby 1 ip 192.168.0.250
+standby 1 priority 120
+standby 1 preempt
+exit
+
+ip route 0.0.0.0 0.0.0.0 g0/1
+
+
+router ospf 1
+router-id 2.2.2.2
+network 10.0.1.0 0.0.0.3 area 0
+exit
+
+------------------------------------------------------
+
+Slave:
+
+	enable
+	clock set 14:10:00 6 jun 2023
+	conf t
+	hostname Slave
+	banner motd #Belepes csak meghatalmazassal!#
+	login block-for 100 attempts 15 within 180
+	logging on
+	login on-failure log
+	login on-success log
+	logging console
+	logging buffered
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	no ip domain-lookup
+	line vty 0 15
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	line console 0
+	password Con123
+	login
+	exec-timeout 10 10
+	exit
+	line aux 0
+	password cisco
+	login
+	exec-timeout 10 10
+	exit
+	enable secret Ena123
+	service password-encryption 
+
+	ip domain-name Slave.hu
+	crypto key generate rsa general-key modulus 1024
+	user admin priv 15 secret cisco
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	ip ssh version 2
+
+	interface g0/1
+	ip address 10.0.2.2 255.255.255.252
+	bandwidth 921600
+	no shutdown
+	exit
+
+
+	interface g0/0
+	ip address 192.168.0.253 255.255.255.0
+	no shutdown
+	exit
+
+
+int g0/0
+standby 1 ip 192.168.0.250
+standby 1 priority 80
+exit
+
+ip route 0.0.0.0 0.0.0.0 g0/1
+
+
+
+router ospf 1
+router-id 3.3.3.3
+network 10.0.2.0 0.0.0.3 area 0
+exit
+
+
+
+
+
+-------------------------------------------------------------------------------
+channel-group 1 mode active
+
+
+
+SW-LO:
+
+	enable
+	clock set 15:10:00 6 jun 2023
+	conf t
+	hostname SW-LO
+	banner motd #Belepes csak meghatalmazassal!#
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	password cisco
+	login
+	exit
+	line console 0
+	password Con123
+	login
+	exit
+	enable secret Ena123
+	service password-encryption 
+
+	interface vlan 1
+	ip address 192.168.0.252 255.255.255.0
+	no shutdown
+	exit
+
+	int range f0/20-24
+	switchport mode trunk
+	channel-group 1 mode active
+	exit
+
+
+	ip domain-name SWLO.hu
+	crypto key generate rsa general-key modulus 1024
+	user admin priv 15 secret cisco
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	ip ssh version 2
+
+---------------------------------------------------------
+
+
+SW-HI:
+
+	enable
+	clock set 15:10:00 6 jun 2023
+	conf t
+	hostname SW-HI
+	banner motd #Belepes csak meghatalmazassal!#
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	password cisco
+	login
+	exit
+	line console 0
+	password Con123
+	login
+	exit
+	enable secret Ena123
+	service password-encryption 
+
+	interface vlan 1
+	ip address 192.168.0.251 255.255.255.0
+	no shutdown
+	exit
+
+	int range f0/20-24
+	switchport mode trunk
+	channel-group 1 mode active
+	exit
+
+	ip domain-name SWHI.hu
+	crypto key generate rsa general-key modulus 1024
+	user admin priv 15 secret cisco
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	ip ssh version 2
+

@@ -1,0 +1,50 @@
+S1:
+en
+conf t
+hostname S1
+int vlan 1
+ip add 192.168.1.1 255.255.255.0
+no shut
+exit
+int range f0/1-24, g0/1-2
+shut
+exit
+int range f0/1-4
+switchport mode trunk
+exit
+int range f0/2, f0/4
+no shut
+
+S2:
+en
+conf t
+hostname S2
+int vlan 1
+ip add 192.168.1.2 255.255.255.0
+no shut
+exit
+int range f0/1-24, g0/1-2
+shut
+exit
+int range f0/1-4
+switchport mode trunk
+exit
+int range f0/2, f0/4
+no shut
+
+S3:
+en
+conf t
+hostname S3
+int vlan 1
+ip add 192.168.1.3 255.255.255.0
+no shut
+exit
+int range f0/1-24, g0/1-2
+shut
+exit
+int range f0/1-4
+switchport mode trunk
+exit
+int range f0/2, f0/4
+no shut

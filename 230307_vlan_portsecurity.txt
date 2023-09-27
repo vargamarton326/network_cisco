@@ -1,0 +1,49 @@
+r:
+int g0/0
+no sh
+int g0/0.10
+encapsulation dot1Q 10
+ip add 192.168.0.1 255.255.255.0
+no sh
+exit
+int g0/0.20
+encapsulation dot1Q 20
+ip add 192.168.1.1 255.255.255.0
+no sh
+exit
+
+ip dhcp pool vlan1
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+exit
+ip dhcp pool vlan2
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+exit
+
+sw:
+ena
+conf t
+vlan 10
+name igazgatosag
+exit
+vlan 20
+name titkarsag
+exit
+interface range f0/1-12
+switchport mode access
+switchport access vlan 10
+interface range f0/13-24
+switchport mode access
+switchport access vlan 20
+exit
+int g0/1
+switchport mode trunk
+exit
+interface range f0/3-12
+shutdown
+int f0/1
+switchport mode access
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation shutdown

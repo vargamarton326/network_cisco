@@ -1,0 +1,53 @@
+Hálózat felderítése:
+1 statikus: Kézzel manuálisan megadva
+2 dinamikus: Saját maga felderíti matenmatikai képlet alapján (rip, ospf. stb...)
+ 
+statikus előnyei:
+kevesebb sávszélességet foglal
+nem szemetel a hálózaton
+
+stat hátrányok:
+sok emberi energiát felemészt
+sok időt felemészt a reagálás
+
+r1 
+gig0/0 172.17.8.1
+s0/0/0 172.17.7.1
+s0/0/1 192.168.6.1
+
+R1(config)#ip route 172.17.8.0 255.255.255.0 g0/0
+R1(config)#ip route 172.17.7.0 255.255.255.0 s0/0/0
+R1(config)#ip route 192.168.6.0 255.255.255.0 s0/0/1
+
+
+Lebegő útvonal
+Ha az elsődleges útvonal meghibásodik ez lép a helyébe. 
+Adminisztratít távolsága nagyobb
+R1(config)#ip route 192.168.6.0 255.255.255.0 s0/0/1 150
+Alapértelmezett útnál az érték a sor végén 1.
+
+IPV6 statikus útvonal:
+R1(config)#ipv6 route 2001:db8:def:2::/64 s0/0/0
+
+
+Összevont cím:
+ip tábla méretének csökkentése érdekében hozták létre. 
+Egyező számokat leírja 2es számrendszerben a többit kitölti 0-val, és prefixet ad mellé.
+
+
+
+TFTP: COPY RUNNING-CONFIG TFTP:
+ADDRESS: szerver címe
+
+----------------------------------------------------------------------------
+Feladat:
+Szarva-rt és Tata-Rt: 10.10.1.1 255.255.255.252 - 10.10.1.2 255.255.255.252
+Tata és Paks: 10.10.2.1 255.255.255.252 - 10.10.2.2 255.255.255.252
+paks és szarvas: 10.10.3.1 255.255.255.252 - 10.10.3.2 255.255.255.252
+192.168.0.0 /24 .0
+TataLan: 90 ip: 192.168.0.1 - 192.168.0.91 /24
+PaksLan1: 25 ip: 192.168.1.1 - 192.168.1.32 /27 .224
+PaksLan2: 12 ip: 192.168.1.34 - 192.168.1.64 /27
+
+TATA -SZARVAS:
+szarvas: 

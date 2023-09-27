@@ -1,0 +1,4 @@
+vlan 2
+end
+int fa0/24
+switchport access vlan 2

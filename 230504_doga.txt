@@ -1,0 +1,23 @@
+Listázza azokat a foglalkozásokat, melyeknél a fizetésátlag nagyobb 1500 USD-nál.
+SELECT JOB, AVG(SAL) as avg_salary
+FROM emp GROUP BY JOB HAVING AVG(SAL) > 1500 ORDER BY avg_salary DESC;
+Listázza azon dolgozók nevét és jövedelmét (fizetés + jutalék),
+SELECT e.ENAME, (e.SAL + IFNULL(e.COMM, 0)) AS Jovedelem
+FROM emp e
+WHERE e.EMPNO IN (SELECT DISTINCT MGR FROM emp)
+ORDER BY e.ENAME;
+---------------------------------------------------
+Listázza ki a főnokok azonosítoit.... 
+
+SELECT e.MGR, COUNT(*) AS EMP_COUNT
+FROM emp AS e GROUP BY e.MGR ORDER BY EMP_COUNT DESC;
+
+Listázza a 20-as részleg azon dolgozóit
+
+SELECT * FROM emp
+WHERE DEPTNO = 20 AND MGR NOT IN(SELECT EMPNO FROM emp WHERE DEPTNO = 20);
+
+
+
+
+SELECT CONCAT(SUBSTR(ename,0,1), LOWER(SUBSTR(ename,2,256))) AS nev, LENGTH(ename) FROM emp WHERE job LIKE 'C%' OR job LIKE 'M%';

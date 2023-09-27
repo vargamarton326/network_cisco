@@ -1,0 +1,59 @@
+Regisztrált (Lefoglalt) TCP Portok:
+-1863 MSN Messenger:
+	nyit egy hátsó ajtót a gépen, és ezen keresztül kommunikál a fogadó és a küldő,
+	de ez egy alacsony biztonsággal üzemelő a rendszert eredményez,
+	mert nincs titkosítás, egyéb védelem. Vírusokhoz előszeretettel használják.
+	
+	Xbox Live 360 is használja
+
+-2000 Cisco SCCP (VoIP):Voice over ip (IP telefon)
+	A legtöbb trójai, logger vírus ezt a portot használja ki,
+	mert ezen a porton keresztül jelentős adatfolyam közlekedik.
+	A cisco ip telefon portja, valós időben továbbít hangot
+
+-8008 Alternate HTTP
+	WEB serverek kifele menő kommunikációra szokták használni	
+
+-8080 Alternate HTTP
+	webes-proxy, gyorsítótár, webkiszolgálóhoz való hozzáférést biztosít,
+	nem helyi (root) felhasználóknak.
+	Trójai vírusok is szokták használni
+
+Jól ismert TCP Portok
+-21 FTP (fájlmegosztáshoz port)
+	File transfer protocol, ügyfél/kiszolgáló alapú,
+	a szervert nagyon leterheli, ha nagy méretű fájlt egyszerre sok kliens felé kell kiszolgálnia
+	Az FTP protokoll nem támogat titkosított autentikációt (felhasználó-azonosítást),
+	így nem megbízható hálózaton való használata veszélyes lehet. 
+
+
+!!!KÉRDÉS: 
+	MI A BIZTONSÁGOS FÁJLMEGOSZTÁS RÖVIDITÉSE ÉS PORTJA? SFTP 22
+	MI A SIMPLE FILE TRANSFER PROTOCOL PORTJA? 115
+
+
+-23 Telnet (távoli elérés)
+	unencrypted text communications - Titkosítatlan, nem biztonságos
+
+-25 SMTP (email küldő port) 
+	A beérkezett emailekről ezen keresztül kap üzenetet a kliens.
+	
+-80 HTTP (hyper text )
+	információátviteli protokoll elosztott, kollaboratív, hipermédiás, információs rendszerekhez.
+	A HTTP egy kérés-válasz alapú protokoll kliens és szerver között.
+	A HTTP-klienseket a „user agent” gyűjtőnévvel is szokták illetni.
+	A user agent jellemzően, de nem feltétlenül webböngésző.	
+	Nem biztonságos, de titkosító/autentikáló SSL vagy TLS réteg beiktatásával a HTTPS-ként már jó.
+
+-110 POP3 (email bejövő)
+	Az emaileket ezen keresztül töltik le a szerverről a kliensprogramok.
+
+-194 Internet Relay Chat (Chat)
+	Internetes Chatszolgáltatások portja.
+
+-443 Secure HTTP (HTTPS)
+	A https egy URI-séma, amely biztonságos http kapcsolatot jelöl.
+	Szintaktikailag megegyezik a http sémával, amelyet a HTTP protokollnál használnak,
+	de a https nem önálló protokoll, hanem csak egy URI séma, mely azt jelzi, hogy a HTTP
+	protokollt kell használni a szerver 443-as TCP portján a HTTP és a TCP szintek közé titkosító/autentikáló
+	SSL vagy TLS réteg beiktatásával. (A titkosítatlan HTTP rendszerint a 80-as TCP portot használja.)

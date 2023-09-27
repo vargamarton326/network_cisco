@@ -1,0 +1,164 @@
+Hálózat		tartomány		Broadcast	prefix		mask
+172.20.10.0	172.20.10.1-254		172.20.10.255	/24	255.255.255.0
+172.20.11.0	172.20.11.1-254 	172.20.11.255
+172.20.12.0	172.20.12.1-254		172.20.12.255
+172.20.13.0	172.20.13.1-254 	172.20.13.255
+172.20.14.0	172.20.14.1-254		172.20.14.255
+
+
+R1:
+
+enable
+conf t
+hostname R1
+banner motd #Belepes csak meghatalmazassal!#
+	
+	login block-for 100 attempts 15 within 180
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	line console 0
+	password cisco
+	login
+	exit
+	line aux 0
+	password cisco
+	login
+	exit
+	enable secret cisco
+	service password-encryption 
+	ip domain-name R1.hu
+	crypto key generate rsa generate-key modulus 1024
+	username admin priv 15 secret cisco
+	ip ssh version 2	
+
+
+int g0/0
+no sh
+exit
+
+int g0/0.10
+encapsulation dot1Q 10
+ip address 172.20.10.1 255.255.255.0
+exit
+
+int g0/0.20
+encapsulation dot1Q 20
+ip address 172.20.11.1 255.255.255.0
+
+int g0/0.30
+encapsulation dot1Q 30
+ip address 172.20.12.1 255.255.255.0
+
+int g0/0.40
+encapsulation dot1Q 40
+ip address 172.20.13.1 255.255.255.0
+
+int g0/0.50
+encapsulation dot1Q 50
+ip address 172.20.14.1 255.255.255.0
+
+int g0/1
+ip address 172.20.15.1 255.255.255.0
+no sh
+exit
+
+ip dhcp excluded-address 172.20.10.1 172.20.10.10
+ip dhcp pool lan10
+network 172.20.10.0 255.255.255.0
+default-router 172.20.10.1
+exit
+
+ip dhcp excluded-address 172.20.11.1 172.20.11.10
+ip dhcp pool lan20
+network 172.20.11.0 255.255.255.0
+default-router 172.20.11.1
+exit
+
+ip dhcp excluded-address 172.20.12.1 172.20.12.10
+ip dhcp pool lan30
+network 172.20.12.0 255.255.255.0
+default-router 172.20.12.1
+exit
+
+ip dhcp excluded-address 172.20.13.1 172.20.13.10
+ip dhcp pool lan40
+network 172.20.13.0 255.255.255.0
+default-router 172.20.13.1
+exit
+
+SW:
+	enable
+	conf t
+	hostname SW
+	banner motd #Belepes csak meghatalmazassal!#
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	line console 0
+	password cisco
+	login
+	exit
+	enable secret cisco
+	service password-encryption 
+	ip domain-name SW.hu
+	crypto key generate rsa generate-key modulus 1024
+	user admin priv 15 secret cisco
+	ip ssh version 2
+
+interface vlan 1
+ip address 172.20.10.2 255.255.255.0
+no shutdown
+exit
+
+interface vlan 10
+ip address 172.20.11.2 255.255.255.0
+no shutdown
+exit
+
+interface vlan 20
+ip address 172.20.12.2 255.255.255.0
+no shutdown
+exit
+
+interface vlan 30
+ip address 172.20.13.2 255.255.255.0
+no shutdown
+exit
+
+int range f0/1-9
+switchport mode access
+switchport access vlan 10
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+
+int range f0/10-18
+switchport mode access
+switchport access vlan 20
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+
+int range f0/19-24
+switchport mode access
+switchport access vlan 30
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+	
+int g0/1
+switchport mode trunk
+no sh
+

@@ -1,0 +1,105 @@
+ena
+clock set 15:50:00 16 mar 2023
+conf t
+hostn S1
+int g0/1
+switchport mode trunk
+no sh
+exit
+int vlan 1 ip add 10.0.0.1 255.255.255.0
+int vlan 2 ip add 10.0.1.1 255.255.255.0
+
+	int range f0/1-12
+	switchport mode access
+	switchport access vlan 1
+	switchport port-security
+	switchport port-security maximum 2
+	switchport port-security mac-address sticky
+	switchport port-security violation restrict
+	no sh
+	exit
+	vlan 2
+	int range f0/13-24
+	switchport mode access
+	switchport access vlan 2
+	switchport port-security
+	switchport port-security maximum 2
+	switchport port-security mac-address sticky
+	switchport port-security violation restrict 
+	no sh
+	exit
+
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	line console 0
+	password Cisco
+	login
+	exec-timeout 2 30
+	exit
+	enable secret Cisco
+	service password-encryption 
+	
+	ip domain-name S1.hu
+	crypto key generate rsa general-keys modulus 1024
+	user admin priv 15 secret cisco
+	ip ssh version 2
+	do wr
+
+------------------------------------------------------------------------
+
+ena
+clock set 15:50:00 16 mar 2023
+conf t
+hostn S2
+int g0/1
+switchport mode trunk
+no sh
+exit
+int vlan 3 ip add 10.0.3.1 255.255.255.0
+
+
+	int range f0/1-24
+	switchport mode access
+	switchport access vlan 3
+	switchport port-security
+	switchport port-security maximum 2
+	switchport port-security mac-address sticky
+	switchport port-security violation restrict
+	no sh
+	exit
+	
+	logging console
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+	line vty 0 15
+	login local
+	transport input ssh
+	exit
+	line console 0
+	password Cisco
+	login
+	exec-timeout 2 30
+	exit
+	enable secret Cisco
+	service password-encryption 
+	
+	ip domain-name S2.hu
+	crypto key generate rsa general-keys modulus 1024
+	user admin priv 15 secret cisco
+	ip ssh version 2
+	do wr
+
+
+.......................................
+access-list 2 permit 10.0.1.0 0.0.0.255
+line vty 5 15
+transport input ssh
+access-class 2 in
+exit
+.......................................
+ssh -l admin 10.0.1.10

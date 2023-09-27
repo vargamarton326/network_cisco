@@ -1,0 +1,4 @@
+angryIPscanner
+Hálózatfelderítés:
+Bármely munka elején érdemes felderíteni a hálózatot, amihez egy lehetőség ez a program.
+Autómatikusan feltérképezi ping segítségével az elérhető hostokat, és egyéb infókat is adhat.

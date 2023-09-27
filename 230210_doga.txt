@@ -1,0 +1,118 @@
+enable
+conf ter
+hostname R1
+int g0/0 
+ip add 10.0.0.1 255.0.0.0
+no sh
+enable secret cisco
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+service pass
+banner motd "Welcome!"
+username admin privilege 15 secret cisco
+line vt 0 15
+transport input ssh
+privilege level 15
+login local
+end
+wr
+ip route 20.0.0.0 255.0.0.0 gig0/0
+ip route 30.0.0.0 255.0.0.0 gig0/0
+ip route 40.0.0.0 255.0.0.0 gig0/0
+
+enable
+conf ter
+hostname R2
+int g0/0 
+ip add 10.0.0.2 255.0.0.0
+no sh
+int g0/1 
+ip add 20.0.0.2 255.0.0.0
+no sh
+int s0/0/0 
+ip add 40.0.0.2 255.0.0.0
+no sh
+enable secret cisco
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+service pass
+banner motd "Welcome!"
+username admin privilege 15 secret cisco
+line vt 0 15
+transport input ssh
+privilege level 15
+login local
+end
+wr
+ip route 30.0.0.0 255.0.0.0 gig0/1
+
+enable
+conf ter
+hostname R2
+int g0/2
+ip add 30.0.0.1 255.0.0.0
+no sh
+int g0/1
+ip add 20.0.0.1 255.0.0.0
+no sh
+enable secret cisco
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+service pass
+banner motd "Welcome!"
+username admin privilege 15 secret cisco
+line vt 0 15
+transport input ssh
+privilege level 15
+login local
+end
+wr
+ip route 10.0.0.0 255.0.0.0 gig0/1
+ip route 40.0.0.0 255.0.0.0 gig0/1
+
+enable
+conf ter
+hostname R3
+int s/0/0 
+ip add 40.0.0.1 255.0.0.0
+no sh
+enable secret cisco
+line console 0
+password cisco
+login
+line vty 0 15
+password cisco
+login
+service pass
+banner motd "Welcome!"
+username admin privilege 15 secret cisco
+line vt 0 15
+transport input ssh
+privilege level 15
+login local
+end
+wr
+ip route 10.0.0.0 255.0.0.0 s0/0/0
+ip route 20.0.0.0 255.0.0.0 s0/0/0
+ip route 30.0.0.0 255.0.0.0 s0/0/0
+
+ip domain name petrik.hu
+cryp key gen rsa
+user admin secret 
+username admin privilege 15 secret cisco
+line vt 0 15
+transport input ssh
+privilege level 15
+login local

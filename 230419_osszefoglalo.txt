@@ -1,0 +1,118 @@
+RTR_LEPUS:
+
+
+
+
+RTR_GRUS:
+ena
+conf t
+hostname RTP_GRUS
+
+int g0/0
+ip add 192.168.80.1 255.255.255.252
+no sh
+
+int g0/1
+no sh
+exit
+
+int g0/1.10
+encapsulation dot1Q 33
+ip address 172.28.33.1 255.255.255.128
+
+int g0/1.20
+encapsulation dot1Q 55
+ip address 172.28.55.1 255.255.255.224
+EXIT
+
+ip dhcp excluded-address 172.28.33.1 172.28.33.13
+ip dhcp pool lan33
+network 172.28.33.0 255.255.255.128
+default-router 172.28.33.1
+dns-server 172.20.5.15
+exit
+
+router ospf 10
+network 192.168.80.0 0.0.0.3 area 0
+network 172.28.33.0 0.0.0.127 area 0
+network 172.28.55.0 0.0.0.31 area 0
+
+ISP:
+
+SW_2_GRUS:
+ena
+conf t
+hostn SW_2_GRUS
+int g0/1
+switchport mode trunk
+no sh
+exit
+int g0/2
+switchport mode trunk
+no sh
+int vlan 33
+ip add 172.28.33.2 255.255.255.128
+int vlan 55
+ip add 172.28.55.2 255.255.255.224
+
+vlan 33
+name LYNX
+int range f0/1-12
+switchport mode access
+switchport access vlan 33
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no sh
+exit
+vlan 55
+name VELA
+int range f0/13-24
+switchport mode access
+switchport access vlan 55
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation restrict 
+no sh
+exit
+
+
+ena
+conf t
+hostn SW_1_GRUS
+int g0/1
+switchport mode trunk
+no sh
+exit
+int g0/2
+switchport mode trunk
+no sh
+int vlan 33
+ip add 172.28.33.3 255.255.255.128
+int vlan 55
+ip add 172.28.55.3 255.255.255.224
+
+vlan 33
+name LYNX
+int range f0/1-12
+switchport mode access
+switchport access vlan 33
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+no sh
+exit
+vlan 55
+name VELA
+int range f0/13-24
+switchport mode access
+switchport access vlan 55
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation restrict 
+no sh
+exit

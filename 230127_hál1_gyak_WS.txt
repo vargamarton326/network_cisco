@@ -1,0 +1,18 @@
+Hálózatdiagnosztikai szoftwer, megmutatja a hálózati adatforgalmat bitekre pontosan.
+Előnye jól rendszerezi az információkat.
+1.lépés: powershell: ipconfig /all
+ - Hálókártya kikeresése, ip, dns, átjáró
+WS: információszerzés az Ip-kről iplocation.com
+
+feladat: Google keresésnél a google melyik szervere válaszol?
+amazon.com oregom
+
+displayfilter: rögziitett adatok közül csak a kiválasztottat mutatja
+
+feladat: pingelj meg valamit:
+
+
+Titkosítattlan adatforgalomból minden információ text formátumban megjelenik
+A titkosított adatfolyamot is látom, de nem tudom értelmezni
+Statisztika menüpontban Flow Graph, Protocol Hierarchy, I/O Graph használata ajánlott.
+Haszna: máik csoportosítási szempont alapján jeleníti meg a dolgokat.

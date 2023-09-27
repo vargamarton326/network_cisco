@@ -1,0 +1,175 @@
+R2:
+int g0/1
+no sh
+int g0/1.10
+encapsulation dot1Q 10
+ip add 192.168.10.1 255.255.255.0
+no sh
+exit
+int g0/1.20
+encapsulation dot1Q 20
+ip add 192.168.20.1 255.255.255.0
+no sh
+exit
+
+
+R3:
+int g0/1
+no sh
+int g0/1.30
+encapsulation dot1Q 30
+ip add 192.168.30.1 255.255.255.0
+no sh
+exit
+int g0/1.40
+encapsulation dot1Q 40
+ip add 192.168.40.1 255.255.255.0
+no sh
+exit
+int g0/2
+no sh
+int g0/2.30
+encapsulation dot1Q 30
+ip add 192.168.30.1 255.255.255.0
+no sh
+exit
+int g0/2.40
+encapsulation dot1Q 40
+ip add 192.168.40.1 255.255.255.0
+no sh
+exit
+
+-------
+ip dhcp pool vlan50
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+ip dhcp excluded-address 192.168.1.1
+ip dhcp excluded-address 192.168.1.2
+exit
+ip dhcp pool vlan60
+network 192.168.10.0 255.255.255.0
+default-router 192.168.10.1
+ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.10.2
+exit
+ip dhcp pool vlan70
+network 192.168.20.0 255.255.255.0
+default-router 192.168.20.1
+ip dhcp excluded-address 192.168.20.1
+ip dhcp excluded-address 192.168.20.2
+exit
+ip dhcp pool vlan80
+network 192.168.30.0 255.255.255.0
+default-router 192.168.30.1
+ip dhcp excluded-address 192.168.30.1
+ip dhcp excluded-address 192.168.30.2
+exit
+ip dhcp pool vlan90
+network 192.168.40.0 255.255.255.0
+default-router 192.168.40.1
+ip dhcp excluded-address 192.168.40.1
+ip dhcp excluded-address 192.168.40.2
+exit
+-------
+interface range f0/1-12
+switchport mode access
+switchport access vlan 10
+-------
+vlan50_sw:
+ena
+conf t
+vlan 50
+name vlan50
+exit
+interface range f0/1-24
+switchport mode access
+switchport access vlan 50
+exit
+int g0/1
+switchport mode trunk
+exit
+interface range f0/5-24
+shutdown
+int vlan 50
+ip add 192.168.1.2 255.255.255.0
+
+vlan60_70_sw:
+
+vlan 60
+name vlan60
+exit
+interface range f0/1-12
+switchport mode access
+switchport access vlan 60
+exit
+int vlan 60
+ip add 192.168.10.2 255.255.255.0
+vlan 70
+name vlan70
+exit
+interface range f0/13-24
+switchport mode access
+switchport access vlan 70
+exit
+int vlan 70
+ip add 192.168.20.2 255.255.255.0
+int g0/1
+switchport mode trunk
+exit
+
+
+vlan80_90_sw_1:
+
+vlan 80
+name vlan80
+exit
+interface range f0/1-12
+switchport mode access
+switchport access vlan 80
+exit
+int vlan 80
+ip add 192.168.30.2 255.255.255.0
+vlan 90
+name vlan90
+exit
+interface range f0/13-24
+switchport mode access
+switchport access vlan 90
+exit
+int vlan 90
+ip add 192.168.40.2 255.255.255.0
+int g0/1
+switchport mode trunk
+exit
+
+vlan80_90_sw_2:
+
+vlan 80
+name vlan80
+exit
+interface range f0/1-12
+switchport mode access
+switchport access vlan 80
+exit
+int vlan 80
+ip add 192.168.30.2 255.255.255.0
+vlan 90
+name vlan90
+exit
+interface range f0/13-24
+switchport mode access
+switchport access vlan 90
+exit
+int vlan 90
+ip add 192.168.40.2 255.255.255.0
+int g0/1
+switchport mode trunk
+exit
+
+--------------
+int f0/1
+switchport mode access
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+--------------

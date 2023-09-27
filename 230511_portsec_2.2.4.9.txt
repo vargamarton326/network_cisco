@@ -1,0 +1,15 @@
+ena
+conf t
+interface range fa0/1-2
+switchport port-secur
+switchport port-secur maximum 1
+switchport port-secur mac-address sticky
+switchport port-secur viola restrict
+end
+conf t
+
+show ip int brief
+
+interface range fa0/3-24, g0/1-2
+sh
+

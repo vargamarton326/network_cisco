@@ -1,0 +1,7 @@
+23.03.02 Cisco eszköz feltörése read only felhasználóval.
+A felhasználóknak 1-15ig lehet jogot adni.
+(keresni!)
+Hash: 
+md5: hash-elő algoritmus
+Szivárványtála
+Védekezés ezek ellen: hosszú és értelmetlen jsz.

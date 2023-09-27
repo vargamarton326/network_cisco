@@ -1,0 +1,28 @@
+stp: spanning tree protocol, feszítőfa protokoll
+a sw-k a beérkezett szórt üzeneteket minden portjukra továbítják
+probléma: ha hálózati húrkot alakítunk ki,
+akkor végtelen folyamat veszi kezdetét, ami szétterheli a hálózatot,
+ez a szórási vihar, broadcast storm.
+megoldás: stp: bizonyos portokat blokkolni fog,
+hogy megszüntesse a húrkot.
+
+ IIIIIII OK------------OK IIIIIII
+ I SW1 I BLOKKOLT------OK I SW2 I
+ I     I BLOKKOLT------OK I	I
+ IIIIIII BLOKKOLT------OK IIIIIII
+
+hurokmentes hálózatok tervezése:
+akár redundáns útvonalakat is ki lehet alakítani stp-vel,
+de inkább válasszunk más megoldást
+
+A switchekből egy fa struktúrát kell kialakítani,
+ahol a gyökér a legtőbb kapcsolattal bíró sw,
+és minden további elemnek egy szülője lehet.
+Meghatározom a gyökérponti hidat, majd megnézem az abból jövő kapcsolatokat,
+és ez alapján építem fel a kapcsolatokat.
+A lehető legrövidebb legyen a lánc, azaz a lehető legkevesebb színt legyen.
+
+RPVST:
+gyors változata az STP-nek
+BPDU Guard:
+adott sw-t ahol konfigurálom az stp-t ott azt nem számítja bele.

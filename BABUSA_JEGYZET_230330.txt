@@ -1,0 +1,27 @@
+Ethernetkeret:
+7rétegű osi modell:
+---
+ 7
+---
+ 6
+---
+ 5
+---	PORT
+ 4	--->	SEGMENT
+---	IP
+ 3	--->	PACKET
+---	MAC
+ 2	--->	FRAME
+---
+ 1
+---
+
+
+a jól ismert portok 1000 alatti azonositóval vannak,
+a kapcsolat kiépítéséhez a forrásport 1000 fölötti random szám lesz.
+Max 65 650 db port lehet. 2 a 16.on
+
+UDP-t használunk ha:
+-1. nagxon kis mennyiségű addatnál
+-2. nagyonjó minősségű hálózat
+-3. nem baj ha kicsit változik az adat

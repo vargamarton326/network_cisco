@@ -1,0 +1,87 @@
+
+ip dhcp excluded-address 192.168.0.1 192.168.0.9
+ip dhcp pool lan_1
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 172.32.79.223
+exit
+
+
+router rip
+version 2
+network 192.168.0.0
+network 10.0.0.0
+network 10.0.0.12
+no auto-summ
+
+
+line con 0
+pass cisco
+login
+exit
+line vty 0 4 
+pass cisco
+login
+exit
+enable secret cisco
+service password-encry
+banner motd ,,Belepni tilos"
+ip domain-name stolen.org
+crypto key generate rsa general-keys modulus 1024
+ip ssh ver 2
+username admin privilege 15 pass cisco
+line vty 0 15
+login local
+transport input ssh
+privilege level 15
+
+230608---------------------------------------------------------
+dhcp
+2 vlan
+s1 g0/1 trunk
+
+
+R1:
+en
+conf t
+no ip domain-lookup
+logging synch
+hostn R1
+router rip
+version 2
+network 192.168.1.0
+network 192.168.2.0
+network 10.0.0.0
+network 10.0.0.12
+no auto-summ
+
+ip dhcp excluded-address 192.168.1.1 192.168.1.9
+ip dhcp pool R1
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 172.32.79.223
+exit
+
+ip dhcp excluded-address 192.168.2.1 192.168.2.9
+ip dhcp pool R2
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.1
+dns-server 172.32.79.223
+exit
+
+int s0/1/0
+ip add 10.0.0.1 255.255.255.252
+no sh
+int s0/2/0
+ip add 10.0.0.14 255.255.255.252
+no sh
+int g0/0/0
+no sh
+int g0/0/0.1
+encapsulation dot1Q 1
+ip add 192.168.1.1 255.255.255.0
+no sh
+int g0/0/0.2
+encapsulation dot1Q 2
+ip add 192.168.2.1 255.255.255.0
+no sh

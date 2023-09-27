@@ -1,0 +1,22 @@
+-- ki az, aki kap jutalékot?
+SELECT emp. EMPNO, emp.ENAME, emp.COMM
+FROM emp
+WHERE emp.COMM >=0;
+
+ 
+
+-- Jövedelem összeadás null-al
+SELECT emp.EMPNO, emp.ENAME, (emp.SAL+IFnull (emp.COMM, 0)) AS jovedelem
+FROM emp;
+
+ 
+
+-- Jövedelem szum-mal null-al
+SELECT SUM(emp.SAL+IFnull (emp.COMM, 0)) AS jovedelem
+FROM emp;
+
+ 
+
+-- 1.20 Listázza a dolgozók nevét, azonosítóját és beosztását a név szerint rendezve. Egy dolgozó beosztása ”Főnök”, ha van beosztottja, egyébként NULL érték. 
+SELECT emp.ENAME, emp.EMPNO, if(emp.EMPNO in (SELECT DISTINCT emp.MGR FROM emp), "fonok", null)
+FROM emp

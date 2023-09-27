@@ -1,0 +1,28 @@
+STATIKUS ROUTING
+	megismeri: kézzel a routing táblából
+		 dinamikusan (protokollal)
+	előny: 	 nem szemetel a hálózaton
+		 előre ismert az útvonal
+	hátrány:	 hibaérzékeny
+		 lassú
+	Zsák-hálózatos
+
+	Hagyományos statikus
+		ip route 0.0.0.0 0.0.0.0 s0/0/0
+		oda-vissza be kell állítani
+	LEBEGŐ ÚTVONAL
+		tartalék útvonal, ha az elsődleges meghibásodna.
+		mind a kettő a routing táblábn van, általában hosszabb, mint a normális út
+	CÍMÖSSZEVONÁS
+		kevesebb helyet foglal: maszk: amíg megegyezik a bináris cím
+		utána 0-kat ír, aztán pontozott decimálisan írni
+Útvonalak adminisztratív távolsága
+
+statikus beállítás	    1
+EIGRP		  90
+IGRP		100
+OSPF		110
+IS-IS		115
+RIP		120
+
+

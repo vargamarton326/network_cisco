@@ -1,0 +1,20 @@
+s1
+ena
+conf t
+int range g0/1-2
+switchport mode trunk
+switchport trunk native vlan 99
+
+s2
+ena
+conf t
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+
+s3
+ena
+conf t
+int g0/2
+switchport mode trunk
+switchport trunk native vlan 99

@@ -1,0 +1,45 @@
+DC:
+int g0/0
+no sh
+ip add 192.168.50.65 255.255.255.192
+exit
+int g0/1
+ip add 192.168.50.129 255.255.255.252
+no sh
+exit
+-------
+ip dhcp pool vlan10
+network 192.168.50.0 255.255.255.192
+default-router 192.168.50.1
+exit
+ip dhcp pool vlan20
+network 192.168.50.128 255.255.255.252
+default-router 192.168.50.129
+exit
+-------
+
+igazgatosag_vlan10_sw:
+ena
+conf t
+vlan 10
+name igazgatosag_vlan20
+exit
+interface range f0/1-12
+switchport mode access
+switchport access vlan 20
+exit
+int g0/1
+switchport mode trunk
+exit
+interface range f0/5-24
+shutdown
+int vlan 20
+ip add 192.168.50.130 255.255.255.224
+
+--------------
+int f0/1
+switchport mode access
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+--------------

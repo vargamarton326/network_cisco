@@ -1,0 +1,20 @@
+Wireshark
+- megmutatja a hálózati adatforgalmak
+- előnye:
+        -jól rendserezi az információkat
+        -információszerzés az IP-kről (iplocation.com)
+
+Feladat: 
+1. keresés
+2. szerverkeresés
+
+Display filter:
+- Szűrő, ami a rögzített elemek közül mutatja, ami érdekel, (pl.: ip.src==192.168.1.1)
+Titkosíttlan adatforgalomból, (mint http) minden információ text formában kiolvasható.
+http.request.method=="POST"
+
+A titkosítottat el lehet olvasni, de ártelmetlen szövegnek tűnik
+
+/Statisztics/flow graph
+                      /protocol hyerarchy
+                      /i/o graph

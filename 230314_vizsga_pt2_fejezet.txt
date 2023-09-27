@@ -1,0 +1,52 @@
+en
+conf t
+hostname Cent-SW
+banner motd #Welcome to Cent-SW#
+-----------------------------
+line con 0
+pass class
+login
+exit
+enable secret cisco
+service password-encry
+-----------------------------
+int vlan 1
+ip add 192.168.1.200 255.255.255.0
+no sh
+exit
+-----------------------------
+int fa0/1
+no sh
+-----------------------------
+ip domain-name cisco.com
+cry key gen rsa
+
+1024
+
+ip sh
+ip ssh ver 2
+username admin secret ccna
+line vty 0 4
+transport input ssh
+login local
+exit
+-----------------------------
+conf t
+int range fastethernet 0/2-24
+switchport mode access
+sh
+
+-----------------------------
+
+int g0/2
+sh
+int g0/1
+switchport mode access
+switchport port-sec
+switchport port-sec max 2
+switchport port-sec mac-add sticky
+
+-----------------------------
+
+ip default-gateway 192.168.1.1
+do wr

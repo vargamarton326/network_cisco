@@ -1,0 +1,131 @@
+R0:
+en
+conf t
+int g0/0
+ip add 10.0.0.1 255.0.0.0
+exit
+hostname R0
+enable secret R0
+service password-encryption
+line con 0
+password R0
+login
+exit
+line vty 0 15 
+password R0
+login 
+exit
+ip route 30.0.0.0 255.0.0.0 g0/0
+ip route 40.0.0.0 255.0.0.0 g0/0
+ip domain-name admin
+crypto key generate rsa
+......
+ip ssh version 2 
+username admin privilege 15 password admin
+line vty 0 15
+login local 
+transport input ssh
+privilege level 15
+banner motd #banner üzenet#
+______________________________________________________________________
+R1:
+en
+conf t
+int g0/0
+ip add 10.0.0.2 255.0.0.0
+exit
+int g0/1
+ip add 20.0.0.1 255.0.0.0
+exit
+int s0/0/0
+ip add 40.0.0.1 255.0.0.0
+exit
+hostname R1
+enable secret R1
+service password-encryption
+line con 0
+password R1
+login
+exit
+line vty 0 15 
+password R1
+login 
+exit
+ip route 30.0.0.0 255.0.0.0 g0/1
+ip route 40.0.0.0 255.0.0.0 s0/0/0
+ip route 10.0.0.0 255.0.0.0 g0/0
+ip domain-name admin
+crypto key generate rsa
+......
+ip ssh version 2 
+username admin privilege 15 password admin
+line vty 0 15
+login local 
+transport input ssh
+privilege level 15
+banner motd #banner uzenet#
+______________________________________________________________________-
+R2:
+en
+conf t
+int g0/1
+ip add 20.0.0.2 255.0.0.0
+exit
+int g0/0
+ip add 30.0.0.1 255.0.0.0
+exit
+hostname R2
+enable secret R2
+service password-encryption
+line con 0
+password R2
+login
+exit
+line vty 0 15 
+password R2
+login 
+exit
+ip route 30.0.0.0 255.0.0.0 g0/0
+ip route 40.0.0.0 255.0.0.0 g0/1
+ip route 10.0.0.0 255.0.0.0 g0/1
+ip domain-name admin
+crypto key generate rsa
+......
+ip ssh version 2 
+username admin privilege 15 password admin
+line vty 0 15
+login local 
+transport input ssh
+privilege level 15
+banner motd #banner uzenet#
+____________________________________________________________________________
+R3:
+en
+conf t
+int s0/0/0
+ip add 40.0.0.2 255.0.0.0
+exit
+hostname R3
+enable secret R3
+service password-encryption
+line con 0
+password R3
+login
+exit
+line vty 0 15 
+password R3
+login 
+exit
+ip route 30.0.0.0 255.0.0.0 s0/0/0
+ip route 40.0.0.0 255.0.0.0 s0/0/0
+ip route 10.0.0.0 255.0.0.0 s0/0/0
+ip domain-name admin
+crypto key generate rsa
+......
+ip ssh version 2 
+username admin privilege 15 password admin
+line vty 0 15
+login local 
+transport input ssh
+privilege level 15
+banner motd #banner uzenet#

@@ -1,0 +1,121 @@
+ROUTER:
+enable
+conf t
+hostname RTR_RUBIN
+int G0/2
+no shut
+exit
+int g0/2.111
+encapsulation dot1Q 111
+ip address 192.168.22.1 255.255.255.128
+int g0/2.5
+encapsulation dot1Q 5
+ip address 192.168.22.129 255.255.255.248
+
+ip dhcp excluded-address 192.168.22.1 192.168.22.23
+ip dhcp pool ZAFIR_lan_1
+network 192.168.22.0 255.255.255.128
+default-router 192.168.22.1
+dns-server 11.22.33.44
+exit
+---------------------------------------------
+int gig0/0
+ip add 172.20.30.1 255.255.255.252
+no sh
+---------------------------------------------
+másik R:
+int gig0/0
+ip add 172.20.30.2 255.255.255.252
+no sh
+
+int gig0/1
+ip add 172.20.20.1 255.255.255.252
+no sh
+
+.............................................
+SW:
+enable
+conf t
+hostname SW1_RUBIN
+int g0/2
+switchport mode trunk
+no sh
+int g0/1
+switchport mode trunk
+no sh
+interface vlan 111
+description ZAFIR
+ip address 192.168.22.2 255.255.255.128
+no shutdown
+exit
+interface vlan 5
+description CITRIN
+ip address 192.168.22.2 255.255.255.248
+no shutdown
+exit
+
+
+int range f0/1-13
+switchport mode access
+switchport access vlan 111
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+
+
+int range f0/14-24
+switchport mode access
+switchport access vlan 5
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+-------------------------------------
+
+
+
+.....................................
+SW2:
+enable
+conf t
+hostname SW1_RUBIN
+int g0/2
+sh
+int g0/1
+switchport mode trunk
+no sh
+interface vlan 111
+description ZAFIR
+ip address 192.168.22.2 255.255.255.128
+no shutdown
+exit
+interface vlan 5
+
+description CITRIN
+ip address 192.168.22.2 255.255.255.248
+no shutdown
+exit
+
+
+int range f0/1-13
+switchport mode access
+switchport access vlan 111
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+
+
+int range f0/14-24
+switchport mode access
+switchport access vlan 5
+switchport port-security
+switchport port-security maximum 3
+switchport port-security mac-address sticky
+switchport port-security violation shut
+exit
+---------------------------------------------

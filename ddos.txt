@@ -1,0 +1,18 @@
+dos/ddos támadás
+Szolgáltatásmegtagadásos támadás: lényege
+kérésekkel annyira leterheljük a kiszolgálót,
+hogy ellehetetlenitem az eredeti funkcióját
+
+smurf attact:
+amikor a támadó egy csomagszerkesztővel összeállit egy pdu-t
+ahol a célcim broadcast a forrás pedig amit támad.
+Eredménye, mindenki a célpontot támadja.
+
+pingelés kevésbé hatékony, a kapcsolat kiépitésére szolgáló kérelem a 3 utas kézfogás
+3way-hand-shake
+lényege:
+<-----SYN-----
+---SYN-ACK--->
+<-----ACK-----
+Utolsó lépés az ack szándékosan nem történik meg,
+és a szerver csak várakozik.

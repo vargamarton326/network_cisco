@@ -1,0 +1,207 @@
+ena
+conf t
+hostname RC
+int g0/0
+ip add 192.168.0.1 255.255.255.0 
+no sh
+description VLAN10-kapcsolat
+exit
+int g0/1
+ip add 192.168.1.1 255.255.255.0 
+no sh
+description VLAN20-kapcsolat
+exit
+line con 0
+pass cisco
+login
+exit
+line vty 0 4 
+pass cisco
+login
+exit
+enable secret cisco
+service password-encry
+banner motd ,,Belepni tilos"
+ip domain-name teszt.hu
+crypto key generate rsa general-keys modulus 1024
+ip ssh ver 2
+username admin privilege 15 pass cisco
+line vty 0 15
+login local
+transport input ssh
+privilege level 15
+ip dhcp excluded-address 192.168.0.1 192.168.0.10
+ip dhcp pool lan10
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 1.1.1.1
+exit
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool lan20
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 1.1.1.1
+exit
+
+-----------------------------------------------------
+
+ena
+conf t
+hostname SW
+int vlan10
+ip add 192.168.0.2 255.255.255.0 
+no sh
+description VLAN10-kapcsolat
+exit
+int vlan20
+ip add 192.168.1.2 255.255.255.0 
+no sh
+description VLAN20-kapcsolat
+exit
+line con 0
+pass cisco
+login
+exit
+line vty 0 4 
+pass cisco
+login
+exit
+enable secret cisco
+service password-encry
+banner motd ,,Belepni tilos"
+ip domain-name teszt.hu
+crypto key generate rsa general-keys modulus 1024
+ip ssh ver 2
+username admin privilege 15 pass cisco
+line vty 0 15
+login local
+transport input ssh
+privilege level 15
+ip dhcp excluded-address 192.168.0.1 192.168.0.10
+ip dhcp pool lan10
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 1.1.1.1
+exit
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool lan20
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 1.1.1.1
+exit
+int range fa0/1-12
+switchport mode access
+switchport access vlan 10
+exit
+int range fa0/13-24
+switchport mode access
+switchport access vlan 20
+exit
+-----------------------------------------------------
+vlan10, vlan20 2.0 trönk
+SW:
+ena
+conf t
+hostname SW
+int vlan10
+ip add 192.168.0.2 255.255.255.0 
+no sh
+description VLAN10-kapcsolat
+exit
+int vlan20
+ip add 192.168.1.2 255.255.255.0 
+no sh
+description VLAN20-kapcsolat
+exit
+line con 0
+pass cisco
+login
+exit
+line vty 0 4 
+pass cisco
+login
+exit
+enable secret cisco
+service password-encry
+banner motd ,,Belepni tilos"
+ip domain-name teszt.hu
+crypto key generate rsa general-keys modulus 1024
+ip ssh ver 2
+username admin privilege 15 pass cisco
+line vty 0 15
+login local
+transport input ssh
+privilege level 15
+ip dhcp excluded-address 192.168.0.1 192.168.0.10
+ip dhcp pool lan10
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 1.1.1.1
+exit
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool lan20
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 1.1.1.1
+exit
+int range fa0/1-12
+switchport mode access
+switchport access vlan 10
+exit
+int range fa0/13-24
+switchport mode access
+switchport access vlan 20
+exit
+int g0/1
+sw mode trunk
+
+------------------------------
+Router:
+ena
+conf t
+hostname RC
+line con 0
+pass cisco
+login
+exit
+line vty 0 4 
+pass cisco
+login
+exit
+enable secret cisco
+service password-encry
+banner motd ,,Belepni tilos"
+ip domain-name teszt.hu
+crypto key generate rsa general-keys modulus 1024
+ip ssh ver 2
+username admin privilege 15 pass cisco
+line vty 0 15
+login local
+transport input ssh
+privilege level 15
+ip dhcp excluded-address 192.168.0.1 192.168.0.10
+ip dhcp pool lan10
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.1
+dns-server 1.1.1.1
+exit
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool lan20
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 1.1.1.1
+exit
+ena
+conf t
+int g0/0.10
+encap dot1Q 10
+ip add 192.168.0.1 255.255.255.0
+no sh
+exit
+int g0/0.20
+encap dot1q 20
+ip add 192.168.1.1 255.255.255.0
+no sh
+exit
+int g0/0
+no sh

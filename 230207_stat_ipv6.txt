@@ -1,0 +1,2 @@
+ipv6 statikus route:
+ipv6 route :: /0
