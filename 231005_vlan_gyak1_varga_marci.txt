@@ -1,0 +1,149 @@
+BR1:
+hostname BR1
+ipv6 unicast-routing
+interface ser 0/0/0
+ip address 192.168.10.1 255.255.255.252 
+no shutdown
+exit
+interface gigabitethernet 0/1
+ip address 192.168.20.1 255.255.255.0 
+ipv6 address 2001:db8:acad:1::10/64 
+ipv6 address fe80::1 link-local
+no shutdown
+exit
+
+router rip
+version 2
+network 192.168.20.0
+network 192.168.10.0
+no auto-summ
+
+
+BR2:
+----------------------------------------
+interface gigabitethernet 0/1
+ip address 192.168.30.1 255.255.255.0 
+no shutdown
+----------------------------------------
+exit
+ena
+conf t
+hostname BR2
+ipv6 unicast-routing
+interface ser 0/0/0
+ip address 192.168.10.2 255.255.255.252 
+no shutdown
+exit
+interface ser 0/0/1
+ip address 192.168.10.5 255.255.255.252 
+no shutdown
+exit
+
+
+ip dhcp pool lan1
+network 192.168.30.0 255.255.255.128
+default-router 192.168.30.1
+dns-server 209.165.201.10
+ip dhcp excluded-address 192.168.30.1 
+ip dhcp excluded-address 192.168.30.2
+ip dhcp pool lan2
+network 192.168.30.128 255.255.255.128
+default-router 192.168.30.1
+dns-server 209.165.201.10
+exit
+
+int g0/1.10
+encapsulation dot1Q 10
+ip address 192.168.30.1 255.255.255.128
+int g0/1.20
+encapsulation dot1Q 20
+ip address 192.168.30.129 255.255.255.128
+no sh
+
+router rip
+version 2
+network 192.168.30.0
+network 192.168.30.129
+network 192.168.10.0
+no auto-summ
+
+BR3:
+ena
+conf t
+hostname BR3
+ipv6 unicast-routing
+interface ser 0/0/0
+ip address 192.168.10.6 255.255.255.252 
+no shutdown
+exit
+interface gigabitethernet 0/1
+ip address 192.168.40.1 255.255.255.0 
+no shutdown
+exit
+interface ser 0/0/1
+ip address 209.165.200.2 255.255.255.248 
+no shutdown
+exit
+
+router rip
+version 2
+network 192.168.40.0
+network 192.168.10.0
+network 209.165.200.0
+no auto-summ
+
+ISP2:
+hostname ISP2
+ipv6 unicast-routing
+interface ser 0/0/0
+ip address 209.165.200.1 255.255.255.248 
+no shutdown
+exit
+interface ser 0/0/1
+ip address 209.165.200.9 255.255.255.248 
+no shutdown
+exit
+
+router rip
+version 2
+network 209.165.200.0
+network 209.165.200.8
+no auto-summ
+
+ISP1:
+hostname ISP1
+ipv6 unicast-routing
+interface ser 0/0/1
+ip address 209.165.200.10 255.255.255.248 
+no shutdown
+exit
+
+router rip
+version 2
+network 209.165.200.8
+no auto-summ
+
+BS1:
+
+BS2_2:
+ena
+conf t
+hostname BS2_2
+vlan 10
+name vlan10
+exit
+int range f0/1-12
+switchport mode access
+switchport access vlan 10
+vlan 20
+name vlan20
+exit
+int range fa0/13-24
+switchport mode access
+switchport access vlan 20
+
+interface gig0/1
+switchport mode trunk
+
+
+BS3:

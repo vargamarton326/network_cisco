@@ -1,0 +1,70 @@
+R_IRODA:
+int g0/1.45
+encapsulation dot1Q 45
+ip address 192.168.55.30 255.255.255.224
+int g0/1.60
+encapsulation dot1Q 60
+ip address 192.168.55.46 255.255.255.240
+no sh
+
+
+ip dhcp pool KIALLITAS
+network 192.168.55.0 255.255.255.224
+default-router 192.168.55.46
+dns-server 68.75.46.2
+ip dhcp excluded-address 192.168.55.46
+
+
+int g0/2
+ip address 10.0.0.1 255.255.255.0
+no sh
+
+
+router ospf 10
+network 192.168.55.29 0.0.0.31 area 0
+network 192.168.55.45 0.0.0.15 area 0
+network 172.20.20.0 0.0.0.3 area 0
+network 10.0.0.0 0.0.0.255 area 0
+
+
+
+
+S_IRODA:
+ena
+conf t
+hostname S_IRODA
+vlan 45
+name KIALLITAS
+exit
+int range f0/1-12
+switchport mode access
+switchport access vlan 45
+vlan 60
+name IRODA
+exit
+int range fa0/13-24
+switchport mode access
+switchport access vlan 60
+
+interface gig0/1
+switchport mode trunk
+
+
+int range f0/1-12
+switchport mode access
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+
+
+
+
+
+
+
+R_VENDEG:
+ip route 0.0.0.0 0.0.0.0 172.20.20.6
+
+router ospf 10
+network 172.20.20.0 0.0.0.3 area 0
+network 172.18.50.0 0.0.0.255 area 0
+network 172.20.20.4 0.0.0.3 area 0
